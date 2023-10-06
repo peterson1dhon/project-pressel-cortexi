@@ -1,0 +1,986 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>Cortexi</title>
+
+<script data-cfasync="false" type="text/javascript" src="js/10042665-10043848.js"></script>
+
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,700,700i&amp;display=swap">
+<link rel="stylesheet" href="css/styles.min.css">
+<link rel="stylesheet" href="css/single-column-layout.css">
+<link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
+<script src="js/37be042c460045af910df4e5f2090579.min.js" crossorigin="anonymous" type="d53c835f62fbc29b2fb22ff6-text/javascript"></script>
+<script type="d53c835f62fbc29b2fb22ff6-text/javascript">Sentry.onLoad(function() { Sentry.init({ sampleRate: 0.5, }); });</script>
+
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-86CF1JXJJ9" type="d53c835f62fbc29b2fb22ff6-text/javascript"></script>
+<script type="d53c835f62fbc29b2fb22ff6-text/javascript">
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-86CF1JXJJ9', {});
+
+    window.ga = window.ga || {};
+
+    // config EPC log API
+    ga.log = '/epc.php';
+        
+    ga.setCookie = function (name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+    ga.getCookie = function (name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) 
+                return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    ga.logVisit = function (){
+        // JSON data to send
+        const $data = {
+            uniqid: ga.uniqid,
+            action:"visit"
+        };
+        navigator.sendBeacon(ga.log , JSON.stringify($data));  
+    }
+
+    ga.logPurchase = function (uniqid, sku, price, url, query, type){
+        // JSON data to send
+        const $data = {
+            uniqid: uniqid,
+            action: "purchase",
+            url: url,
+            type: type,
+            sku: sku,
+            price: price
+        };
+        navigator.sendBeacon(ga.log, JSON.stringify($data));  
+    }
+    
+    ga.ViewItem = function ($itemSKU,$itemValue){
+        gtag("event", "view_item", {
+            currency: "USD",
+            value: $itemValue,
+            items: [
+                {
+                    item_id: $itemSKU,
+                    item_name: "Cortexi (" + $itemSKU + ")",
+                }]
+        });
+        console.log("GA4 Track View Item", $itemSKU, $itemValue);
+    }
+
+    ga.BeginCheckout = function ($itemSKU,$itemValue){
+        gtag("event", "begin_checkout", {
+            currency: "USD",
+            value: $itemValue,
+            items: [
+                {
+                    item_id: $itemSKU,
+                    item_name: "Cortexi (" + $itemSKU + ")",
+                    quantity: 1,
+                    price: $itemValue                    
+                }]
+        });
+        console.log("GA4 Track Begin Checkout", $itemSKU, $itemValue);
+    }
+
+    ga.Purchase = function ($order,$itemSKU,$itemValue,$url = false){
+
+        $url = $url || window.location.pathname + encodeURIComponent(window.location.search);
+
+        gtag("event", "purchase", {
+            currency: "USD",
+            transaction_id: $order,
+            value: $itemValue,
+            page_location: $url,
+            items: [
+                {
+                    item_id: $itemSKU,
+                    item_name: "Cortexi (" + $itemSKU + ")",
+                    quantity: 1,
+                    price: $itemValue
+                }]
+        });    
+
+        if(typeof customTracker === 'function'){
+            customTracker($order, $itemSKU, $itemValue);
+        }             
+
+        console.log("GA4 Track Purchase", $order, $itemSKU, $itemValue);        
+    }
+
+    ga.waitFor = function (variableName, callback) {
+        if (typeof ga[variableName] !== 'undefined' && ga[variableName] !== null) {
+            callback();
+        } else {
+            setTimeout(function() {
+            ga.waitFor(variableName, callback);
+            }, 100);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+                    ga.uniqid = Math.floor(Math.random() * 100000) + Date.now().toString();
+            // log visits for Earning per Click computing
+            ga.url = window.location.pathname;
+            ga.query = encodeURIComponent(window.location.search);
+            ga.logVisit();
+            ga.setCookie('ga_uniqid', ga.uniqid, 3);
+            
+                            ga.ViewItem("CTX01", 69);    
+                            ga.ViewItem("CTX06", 294);    
+                            ga.ViewItem("CTX03", 177);    
+                            
+            ga.buttons = document.getElementsByClassName('addToCart');
+            for(var i = 0; i < ga.buttons.length; i++) {
+                ga.buttons[i].addEventListener('click', (e)  => {
+                    ga.BeginCheckout(e.target.dataset.sku, e.target.dataset.price);
+                    ga.setCookie(ga.uniqid + '_sku', e.target.dataset.sku, 3);
+                    ga.setCookie(ga.uniqid + '_price', e.target.dataset.price, 3);
+                    ga.setCookie(ga.uniqid + '_url', window.location.pathname, 3);
+                    ga.setCookie(ga.uniqid + '_query', encodeURIComponent(window.location.search), 3);
+                    ga.setCookie(ga.uniqid + '_type', "bank", 3);
+                    if(typeof window[e.target.dataset.callback] === 'function'){
+                        window[e.target.dataset.callback](e);
+                    }                        
+                }, false);
+            } 
+        
+            });
+</script>
+<script type="d53c835f62fbc29b2fb22ff6-text/javascript">
+  var mysrc = "https://tracking.buygoods.com/track/?a=7940&firstcookie=0"
+    +"&tracking_redirect=&referrer="+encodeURIComponent(document.referrer)
+    +"&sessid2="+ReadCookie('sessid2')+"&product=CTX01,CTX06,CTX03&caller_url="+encodeURIComponent(window.location.href);
+  if(typeof add_to_cart !== 'undefined') {
+    mysrc = mysrc+'&add_to_cart='+add_to_cart;
+  }
+  var newScript = document.createElement('script');
+  newScript.type = 'text/javascript';
+  newScript.defer = true;
+  newScript.src = mysrc;
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(newScript, s);
+  function ReadCookie(name){name += '='; var parts = document.cookie.split(/;\s*/);for (var i = 0; i < parts.length; i++) {var part = parts[i]; if (part.indexOf(name) == 0) return part.substring(name.length)} return '';}
+</script>
+<script type="d53c835f62fbc29b2fb22ff6-text/javascript">setTimeout(function () {var i = document.createElement("iframe"),oid = new URLSearchParams(window.location.search);i.async = true;i.style="display:none";i.setAttribute("src", "https://buygoods.com/affiliates/go/conversion/iframe/bg?a=7940&t=b1896b910fa2bef3d0818342c24ee468&s="+ReadCookie('sessid2'));document.body.appendChild(i);}, 1000);</script>
+</head>
+<body class="large-player">
+<section class="bg-primary p-2 pt-4">
+<div class="container">
+<h1 class="text-center vsl-heading">Claim Your Discounted Cortexi Below While Stock Lasts</h1>
+</div>
+</section>
+<div class="offer">
+<div class="container container-big">
+<div class="p-4 bg-primary triangle"></div>
+<div class="row pt-5">
+<div class="col-md-4 text-center mb-3 zoom  order-md-first order-sm-last order-sm-last order-last">
+<div class="bottleArea ">
+<div class="row">
+<div class="col-sm-6 col-md-12 bottleTop">
+<div class="bottleTitle">
+<h1 class="mb-0">Try One</h1>
+<h4 class="mt-0">30 Days, 1 Bottle</h4>
+</div>
+<img class="img-fluid" src="images/PRODx1-500px.png">
+</div>
+<div class="col-sm-6 col-md-12 addToCartArea">
+<div class="bottlePrice">
+<h2 class="display-4">$69</h2>
+<span class="perBottle">Per<br>Bottle<br></span>
+<div class="youSave">
+<p>YOU SAVE $110!</p>
+</div>
+<a class="addToCart" data-callback="ctaEvents" data-sku="CTX01" data-price="69" data-link-type="vsl-cta" data-link-index="1" href="https://www.buygoods.com/secure/checkout.html?account_id=7940&amp;product_codename=CTX01&amp;redirect=aHR0cHM6Ly90cnljb3J0ZXhpLmNvbS9iL3UxLnBocA==" target="_blank">Add to Cart</a>
+<p class="money-back"><em>• 60 Day Money-Back Guarantee •</em></p>
+<img class="img-fluid" src="images/cards.png">
+<h3>
+<s class="oldPrice mx-1">$179</s>
+<span class="newPrice mx-1">$69<br></span>
+<span class="shipping">+SHIPPING�&nbsp;</span>
+</h3>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-4 text-center mb-3 zoom order-md-1 order-sm-first order-first">
+<div class="bottleArea  featured">
+<div class="row">
+<div class="col-sm-6 col-md-12 bottleTop">
+<div class="bottleTitle">
+<h1 class="mb-0">Best Value</h1>
+<h4 class="mt-0">180 Days, 6 Bottles</h4>
+</div>
+<img class="img-fluid" src="images/PRODx6-500px.png">
+</div>
+<div class="col-sm-6 col-md-12 addToCartArea">
+<div class="bottlePrice">
+<h2 class="display-4">$49</h2>
+<span class="perBottle">Per<br>Bottle<br></span>
+<div class="youSave">
+<p>YOU SAVE $780!</p>
+</div>
+<a class="addToCart" data-callback="ctaEvents" data-sku="CTX06" data-price="294" data-link-type="vsl-cta" data-link-index="6" href="https://www.buygoods.com/secure/checkout.html?account_id=7940&amp;product_codename=CTX06&amp;redirect=aHR0cHM6Ly90cnljb3J0ZXhpLmNvbS9iL3UxLnBocA==" target="_blank">Add to Cart</a>
+<p class="money-back"><em>• 60 Day Money-Back Guarantee •</em></p>
+<img class="img-fluid" src="images/cards.png">
+<h3>
+<s class="oldPrice mx-1">$1074</s>
+<span class="newPrice mx-1">$294<br></span>
+<span class="shipping">US SHIPPING�&nbsp;</span>
+<span class="freeShiping">FREE</span>
+</h3>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-4 text-center mb-3 zoom order-md-last">
+<div class="bottleArea ">
+<div class="row">
+<div class="col-sm-6 col-md-12 bottleTop">
+<div class="bottleTitle">
+<h1 class="mb-0">Most Popular</h1>
+<h4 class="mt-0">90 Days, 3 Bottles</h4>
+</div>
+<img class="img-fluid" src="images/PRODx3-500px.png">
+</div>
+<div class="col-sm-6 col-md-12 addToCartArea">
+<div class="bottlePrice">
+<h2 class="display-4">$59</h2>
+<span class="perBottle">Per<br>Bottle<br></span>
+<div class="youSave">
+<p>YOU SAVE $360!</p>
+</div>
+<a class="addToCart" data-callback="ctaEvents" data-sku="CTX03" data-price="177" data-link-type="vsl-cta" data-link-index="3" href="https://www.buygoods.com/secure/checkout.html?account_id=7940&amp;product_codename=CTX03&amp;redirect=aHR0cHM6Ly90cnljb3J0ZXhpLmNvbS9iL3UxLnBocA==" target="_blank">Add to Cart</a>
+<p class="money-back"><em>• 60 Day Money-Back Guarantee •</em></p>
+<img class="img-fluid" src="images/cards.png">
+<h3>
+<s class="oldPrice mx-1">$537</s>
+<span class="newPrice mx-1">$177<br></span>
+<span class="shipping">US SHIPPING�&nbsp;</span>
+<span class="freeShiping">FREE</span>
+</h3>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="text-center pb-4 pt-3"><img class="img-fluid" src="images/paypal-pay-later.jpg" style="border: #041e73 2px solid;"></div>
+<div class="row">
+<div class="col-9 col-sm-5 col-md-4 col-4 mx-auto d-block">
+<div class="d-block mx-auto">
+<h4 class="text-center">Our customers say</h4>
+</div>
+<div class="d-block mx-auto"><img class="img-fluid" src="images/rating.png"></div>
+<div class="d-block mx-auto">
+<p class="text-center">based on 16,200+ reviews!</p>
+</div>
+</div>
+</div>
+</div>
+</div> <section class="bg-secondary">
+<div class="container p-4 py-xl-5 py-xs-1">
+<div class="row">
+<div class="col-lg-7">
+<h4 class="hero-heading text-primary"><strong>CORTEXI</strong></h4>
+<h1 class="main-heading">360° Hearing Support</h1>
+<p class="display-6"><em>Give Your Ears A Rest</em></p>
+<p>When I first started working on the formula that was to become Cortexi, I never would have imagined in a million years that I would one day help thousands of people from around the world fulfill their dreams of improving their hearing health.<br><br>It’s people like you that make all those years of research and testing worthwhile, and I hope you manage to get the most out of Cortexi while I can still afford to produce it at these prices.<br></p>
+<div class="row">
+<div class="col-6 col-sm-4 col-md-3 col-lg-4 col-xl-4"><img class="img-fluid" src="images/signature.png"></div>
+<div class="col-6 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+<p><strong>Jonathan Miller</strong><br>Creator of Cortexi</p>
+</div>
+</div>
+</div>
+<div class="col-lg-5 d-lg-block d-md-none d-sm-none d-none"><img class="img-fluid" src="images/PRODx1.png"></div>
+</div>
+</div>
+</section>
+<section class="bg-light no-url">
+<div class="container">
+<h1 class="w-75 mx-auto main-heading text-center my-4">Order <span class="text-primary">6 Bottles</span>�&nbsp;Or <span class="text-primary">3 Bottles</span>�&nbsp;And Get <span class="is-underlined">2 FREE Bonuses</span>!</h1>
+<div class="row gy-4 gy-md-0">
+<div class="col-12 col-sm-6 col-md-6">
+<div class="m-1 bonuses">
+<div><img class="img-fluid" src="images/hear-like-a-pro2.jpg"></div>
+<div class="bonus-title">
+<h2 class="text-white"><strong>FREE BONUS #1</strong></h2>
+</div>
+<div class="bonus-text m-3">
+<p class="small-11p text-center text-muted">*This image represents a digital download and not a physical book.</p>
+<h4 class="fw-bold text-center">Hear <br>Like A Pro</h4>
+</div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6">
+<div class="m-1 bonuses">
+<div><img class="img-fluid" src="images/bonus2.jpg"></div>
+<div class="bonus-title">
+<h2 class="text-white"><strong>FREE BONUS #2</strong></h2>
+</div>
+<div class="bonus-text m-3">
+<p class="small-11p text-center text-muted">*This image represents a digital download and not a physical book.</p>
+<h4 class="fw-bold text-center">Powerful Ways To Sharpen Your Memory</h4>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="faq">
+<div class="container p-4 py-xl-5 bg-white">
+<div>
+<h3 class="testi-heading text-center">Real Cortexi Users Real�&nbsp;<span class="is-underlined">Life‑Changing Results</span></h3>
+<div class="row p-5 sp-image">
+<div class="col-6 col-md-3 col-lg-3"><img class="polaroid img-fluid" src="images/u1.jpg"></div>
+<div class="col-6 col-md-3 col-lg-3"><img class="polaroid img-fluid" src="images/u2.jpg"></div>
+<div class="col-6 col-md-3 col-lg-3"><img class="polaroid img-fluid" src="images/u3.jpg"></div>
+<div class="col-6 col-md-3 col-lg-3"><img class="polaroid rotate5 img-fluid" src="images/u4.jpg"></div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-3 col-md-2 col-lg-2"><img class="img-fluid d-block mx-auto testimonial-thumb" src="images/t1.jpg"></div>
+<div class="col">
+<h5><strong>I’ve never felt sharper</strong></h5>
+<div><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg>
+<p class="d-inline text-success fw-bold">�&nbsp;Verified Purchase</p>
+</div>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-quote fs-4">
+<path d="M12 12a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1h-1.388c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 9 7.558V11a1 1 0 0 0 1 1h2Zm-6 0a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1H4.612c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 3 7.558V11a1 1 0 0 0 1 1h2Z"></path>
+</svg><span>Cortexi did wonders to support my hearing. I work as an audio engineer, so protecting my ears against noise is a must. Go for the 6-bottle pack - it’s the best investment you’ll ever make.<br><strong>Sam W. </strong>- Huston, TX�&nbsp;</span></p>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-3 col-md-2 col-lg-2"><img class="img-fluid testimonial-thumb d-block mx-auto" src="images/t2.jpg"></div>
+<div class="col">
+<h5><strong>People kept asking me about it</strong></h5>
+<div><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg>
+<p class="d-inline text-success fw-bold">�&nbsp;Verified Purchase</p>
+</div>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-quote fs-4">
+<path d="M12 12a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1h-1.388c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 9 7.558V11a1 1 0 0 0 1 1h2Zm-6 0a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1H4.612c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 3 7.558V11a1 1 0 0 0 1 1h2Z"></path>
+</svg><span>It’s only been three weeks since I started taking Cortexi, but I love how easy it is to take and how well it works to support my mental sharpness. I put a couple of drops in my morning coffee and just go on my way. I’ve even shared my supply with a few friends and they’re already coming back for more!<br><strong>Gary V.</strong> - Albany, NY</span></p>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-3 col-md-2 col-lg-2"><img class="img-fluid testimonial-thumb d-block mx-auto" src="images/t3.jpg"></div>
+<div class="col">
+<h5><strong>The gift that keeps on giving</strong></h5>
+<div><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg>
+<p class="d-inline text-success fw-bold">�&nbsp;Verified Purchase</p>
+</div>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-quote fs-4">
+<path d="M12 12a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1h-1.388c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 9 7.558V11a1 1 0 0 0 1 1h2Zm-6 0a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1H4.612c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 3 7.558V11a1 1 0 0 0 1 1h2Z"></path>
+</svg><span>�&nbsp; I treasure my peace and quiet more than anything. So I’m well aware just how important the health of my ears is. Knowing that by taking Cortexi I’m feeding my hearing these essential nutrients helps me sleep better at night. Definitely give this one a try.<br><strong>Jack B. </strong>- Seattle, WA</span></p>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-3 col-md-2 col-lg-2"><img class="img-fluid testimonial-thumb d-block mx-auto" src="images/t4.jpg"></div>
+<div class="col">
+<h5><strong>It’s like a fog has been lifted…</strong></h5>
+<div><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill fs-5 text-warning mb-2">
+<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg>
+<p class="d-inline text-success fw-bold">�&nbsp;Verified Purchase</p>
+</div>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-quote fs-4">
+<path d="M12 12a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1h-1.388c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 9 7.558V11a1 1 0 0 0 1 1h2Zm-6 0a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1H4.612c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 3 7.558V11a1 1 0 0 0 1 1h2Z"></path>
+</svg><span>I actually took Cortexi on the recommendation of a friend, after I’d already tried everything else. Let me tell you - nothing on the market compares to this. I’m three months in, my mind is sharp and the mental fog has lifted!<br><strong>Jim D. </strong>- Madison, WI�&nbsp;</span></p>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-secondary">
+<div class="container py-5">
+<div class="row bg-white rounded-4">
+<div class="col-md-4 col-lg-4"><img class="img-fluid mx-auto d-block" src="images/guarantee.jpg"></div>
+<div class="col-md-8 col-lg-8">
+<h2 class="fw-bolder">60-DAY MONEY BACK GUARANTEE 100% SATISFACTION GUARANTEED<br></h2>
+<p>Cortexi comes with a 100% money back guarantee - 60 full days from your original purchase. If you're not totally and completely satisfied with our product or your results within the first 60 days simply let us know by calling our toll-free number or dropping us an email and we'll gladly give you a <strong>full refund within 48 hours</strong> of the product being returned. <br><br>
+That's right - simply return the product, even your empty bottles, anytime within 60 days of your purchase and you'll receive a full, no-questions-asked refund (minus shipping and handling fees).</p>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div class="container">
+<p class="text-center py-xl-5 py-xs-3">�&nbsp;<span class="fs-3 fw-bolder">Inside Every Cortexi Drop You’ll Find:<br></span><span class="is-underlined">Over 20 Carefully-Selected Ingredients</span>�&nbsp;That Support Healthy Hearing, Including:</p>
+<div class="row d-xl-flex justify-content-xl-center text-center">
+<div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+<div><img class="img-fluid ingredients-thumb" src="images/grapes.png"></div>
+<div class="text-center ingredients-name">
+<h5><strong>Grape Seed</strong></h5>
+</div>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check2-circle text-primary">
+<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+</svg>�&nbsp;Antioxidants protect the ear</p>
+</div>
+<div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+<div><img class="img-fluid ingredients-thumb" src="images/greenTea.png"></div>
+<div class="text-center ingredients-name">
+<h5><strong>Green Tea</strong></h5>
+</div>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check2-circle text-primary">
+<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+</svg>�&nbsp;Improves blood flow to the ears</p>
+</div>
+<div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+<div><img class="img-fluid ingredients-thumb" src="images/gymnema.png"></div>
+<div class="text-center ingredients-name">
+<h5><strong>Gymnema Sylvestre</strong></h5>
+</div>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check2-circle text-primary">
+<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+</svg>�&nbsp;Supports hearing</p>
+</div>
+<div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+<div><img class="img-fluid ingredients-thumb" src="images/capsicum.png"></div>
+<div class="text-center ingredients-name">
+<h5><strong>Capsicum Annuum</strong></h5>
+</div>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check2-circle text-primary">
+<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+</svg>�&nbsp;Supports healthy inflammation</p>
+</div>
+<div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+<div><img class="img-fluid ingredients-thumb" src="images/i-ginseng-root.jpg"></div>
+<div class="text-center ingredients-name">
+<h5><strong>Panax Ginseng</strong></h5>
+</div>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check2-circle text-primary">
+<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+</svg>�&nbsp;Neuroprotective properties</p>
+</div>
+<div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+<div><img class="img-fluid ingredients-thumb" src="images/i-astagalus.jpg"></div>
+<div class="text-center ingredients-name">
+<h5><strong>Astragalus</strong></h5>
+</div>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check2-circle text-primary">
+<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+</svg>�&nbsp; Supports clear sounds </p>
+</div>
+<div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+<div><img class="img-fluid ingredients-thumb" src="images/i-chromium.jpg"></div>
+<div class="text-center ingredients-name">
+<h5><strong>Chromium Picolinate</strong></h5>
+</div>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check2-circle text-primary">
+<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+</svg><span style="color: rgb(51, 51, 51);">�&nbsp;</span>Supports auditory health</p>
+</div>
+<div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+<div><img class="img-fluid ingredients-thumb" src="images/i-maca-root.jpg"></div>
+<div class="text-center ingredients-name">
+<h5><strong>Maca Root</strong></h5>
+</div>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check2-circle text-primary">
+<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+</svg><span style="color: rgb(51, 51, 51);">�&nbsp;</span>Boosts Your Energy</p>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-light mx-auto py-5">
+<div class="container">
+<h2 class="text-primary text-center fw-bold mb-4">Frequently Asked Questions</h2>
+<div class="accordion accordion-flush" role="tablist" id="accordion-2">
+<div class="accordion-item">
+<h2 class="accordion-header" role="tab"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-2 .item-1" aria-expanded="true" aria-controls="accordion-2 .item-1">Is Cortexi right for Me?</button></h2>
+<div class="accordion-collapse collapse show item-1" role="tabpanel" data-bs-parent="#accordion-2">
+<div class="accordion-body">
+<p class="mb-0">Cortexi has provided amazing hearing support for men and women in their 30s, 40, 50s and even 70s. Because it was engineered based on teachings of modern science, Cortexi formula is very gentle yet very powerful at the same time using pure plant ingredients and natural minerals. And you can rest assured knowing it's manufactured in the United States in a state-of-the-art FDA registered and GMP certified facility.</p>
+</div>
+</div>
+</div>
+<div class="accordion-item">
+<h2 class="accordion-header" role="tab"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-2 .item-2" aria-expanded="false" aria-controls="accordion-2 .item-2">What kind of results can I expect from Cortexi?</button></h2>
+<div class="accordion-collapse collapse item-2" role="tabpanel" data-bs-parent="#accordion-2">
+<div class="accordion-body">
+<p class="mb-0">Cortexi is a powerful and effective hearing support and all-day energy helper. Thousands of people enjoy taking Cortexi every day with great results and we have not received a single complaint yet. Once your body adapts to the ingredients you will notice less noise and better ear health.</p>
+</div>
+</div>
+</div>
+<div class="accordion-item">
+<h2 class="accordion-header" role="tab"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-2 .item-3" aria-expanded="false" aria-controls="accordion-2 .item-3">How long will it take to see results?</button></h2>
+<div class="accordion-collapse collapse item-3" role="tabpanel" data-bs-parent="#accordion-2">
+<div class="accordion-body">
+<p class="mb-0">We're all different and that's why the time it takes to see results varies. Most people start feeling a difference after the first week. In our tests, the best results come when you take Cortexi consistently for 3 months (or longer) to support and optimize your entire system. Therefore, we strongly recommend you take advantage of our 3 or 6 bottle discount package.</p>
+</div>
+</div>
+</div>
+<div class="accordion-item">
+<h2 class="accordion-header" role="tab"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-2 .item-4" aria-expanded="false" aria-controls="accordion-2 .item-4">What is the best way to take Cortexi?</button></h2>
+<div class="accordion-collapse collapse item-4" role="tabpanel" data-bs-parent="#accordion-2">
+<div class="accordion-body">
+<p class="mb-0">Take one dropper in the morning before breakfast and take another dropper before lunch. You can place it under your tongue, dissolve it in a glass of water, or natural juice. You will love the results and how you'll feel. A full dropper contains approximately 15 drops of liquid.</p>
+</div>
+</div>
+</div>
+<div class="accordion-item">
+<h2 class="accordion-header" role="tab"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-2 .item-5" aria-expanded="false" aria-controls="accordion-2 .item-5">What if Cortexi doesn’t work for me?</button></h2>
+<div class="accordion-collapse collapse item-5" role="tabpanel" data-bs-parent="#accordion-2">
+<div class="accordion-body">
+<p class="mb-0">I demand you are enthusiastic with your purchase, not just satisfied. And you won't know until you try it! So you can use Cortexi for 60 days, with my "No Questions Asked 100% Money Back Guarantee". The only way to be totally convinced is to try this amazing formula and experience the results for yourself.</p>
+</div>
+</div>
+</div>
+<div class="accordion-item">
+<h2 class="accordion-header" role="tab"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-2 .item-6" aria-expanded="false" aria-controls="accordion-2 .item-6">Where can I buy Cortexi and how quickly can I get it?</button></h2>
+<div class="accordion-collapse collapse item-6" role="tabpanel" data-bs-parent="#accordion-2">
+<div class="accordion-body">
+<p class="mb-0">To make sure you are buying the original product and to ensure the purity of ingredients please buy from the official website only. We'll ship your order directly to your home or office using a premium carrier such as FedEx or UPS. We strive to ship every order within 24 working hours and to make things easy you will receive an email with your tracking number so that you can follow your package. On average, the package will arrive at your doorstep somewhere between 5 to 10 days for domestic orders.</p>
+</div>
+</div>
+</div>
+<div class="accordion-item">
+<h2 class="accordion-header" role="tab"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-2 .item-7" aria-expanded="false" aria-controls="accordion-2 .item-7">Is my purchase secure? How many times will you charge my card?</button></h2>
+<div class="accordion-collapse collapse item-7" role="tabpanel" data-bs-parent="#accordion-2">
+<div class="accordion-body">
+<p class="mb-0">To purchase Cortexi you are only asked for a one time payment right on this page. There are no other future payments needed to benefit from this product. This website is highly secure. We use industry-leading technology (such as SSLs) to keep your information safe and private.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="benefits">
+<div class="container mt-5">
+<div class="row">
+<div class="col-sm-4 col-md-4 text-center"><img class="img-fluid rounded-circle" src="images/benefits1.jpg">
+<p class="fs-3 fw-bolder"><strong><span style="color: rgb(0, 0, 0);">SUPPORTS HEALTHY HEARING</span></strong></p>
+</div>
+<div class="col-sm-4 col-md-4 text-center"><img class="img-fluid rounded-circle" src="images/benefits2.jpg">
+<p class="fs-3 fw-bolder">STRENGTHENS MEMORY</p>
+</div>
+<div class="col-sm-4 col-md-4 text-center"><img class="img-fluid rounded-circle" src="images/benefits3.jpg">
+<p class="fs-3 fw-bolder">SHARPENS MENTAL ACUITY</p>
+</div>
+</div>
+<p>Cortexi's <strong>incredible formula</strong> brings together high quality raw ingredients sourced from different parts of the world that work in synergy for maximum performance. It is the only natural supplement that supports <strong>healthy hearing </strong>with <strong>proven results</strong>. Cortexi’s many benefits include:</p>
+<div class="row d-xl-flex align-items-xl-center row-cols-1 row-cols-sm-2 row-cols-md-3">
+<div class="col">
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check2-circle fs-2 text-primary">
+<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+</svg>�&nbsp;<strong>Natural Formula</strong></p>
+</div>
+<div class="col">
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check2-circle fs-2 text-primary">
+<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+</svg>�&nbsp;<strong>Plant Ingredients</strong></p>
+</div>
+<div class="col">
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check2-circle fs-2 text-primary">
+<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+</svg>�&nbsp;<strong>Non-GMO</strong></p>
+</div>
+<div class="col">
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check2-circle fs-2 text-primary">
+<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+</svg>�&nbsp;<strong>Easy To Take</strong></p>
+</div>
+<div class="col">
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check2-circle fs-2 text-primary float-start">
+<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+</svg>�&nbsp;<strong>Can be added to your coffee or any other drink</strong></p>
+</div>
+<div class="col">
+<p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check2-circle fs-2 text-primary">
+<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+</svg>�&nbsp;<strong>Non-Habit Forming</strong></p>
+</div>
+</div>
+<div><button class="btn btn-primary btn-lg d-block mx-auto cta-button" type="button">ORDER NOW</button></div>
+</div>
+</section>
+<section class=".bg-light">
+<div class="container py-4 py-xl-5">
+<div class="row gy-4 gy-md-0 d-xl-flex justify-content-xl-center">
+<div class="col d-md-flex align-items-md-center">
+<div class="width-450">
+<h2 class="text-uppercase fw-bold">EXPERIENCE 360° HEARING FOR YOURSELF</h2>
+<p class="my-3">100% Natural Formula Expressly Designed to Support Healthy Hearing and Mental Sharpness Well Into Your Golden Years.</p>
+<p class="my-3">Experience for yourself the joys of:</p>
+<div class="fw-bold d-flex align-items-center"><span class="bs-icon-md d-flex justify-content-center align-items-center bs-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check2-circle text-danger">
+<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+</svg></span><span>Hearing your loved ones clearly, and the sound of your favorite song *</span></div>
+<div class="fw-bold d-flex align-items-center"><span class="bs-icon-md d-flex justify-content-center align-items-center bs-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check2-circle text-danger">
+<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+</svg></span><span>Reduced noise and interference *</span></div>
+<div class="fw-bold d-flex align-items-center"><span class="bs-icon-md d-flex justify-content-center align-items-center bs-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-check2-circle text-danger">
+<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+</svg></span><span>Increased mental sharpness and stronger ability to form memories *</span></div>
+</div>
+</div>
+</div>
+<p style="">* Results may vary. Always seek the guidance of your doctor or other qualified health professional with any questions you may have regarding your health or a medical condition before taking any supplementation.</p>
+</div>
+</section>
+<section class="mt-5 bg-light">
+<div class="container py-4 py-xl-5">
+<div class="row gy-4 gy-md-0">
+<div class="col-md-6 col-lg-6 order-sm-last order-md-last"><img class="rounded img-fluid d-block mx-auto" src="images/PRODx1-badge.png"></div>
+<div class="col-md-6 col-lg-6 d-md-flex align-items-md-center order-sm-first order-first order-md-last">
+<div class="hero-text-box">
+<div>
+<h1 class="main-heading hero-heading" style="color: rgb(0,0,0);">Give your ears<br>a rest!</h1>
+</div>
+<h3 class="hero-text">Get the free e-books�&nbsp;<br><strong><span style="color: rgba(var(--bs-white-rgb),var(--bs-text-opacity)) ; background-color: rgba(255, 255, 255, 0);">Meditation PDF�&nbsp;Guide</span></strong>�&nbsp;and�&nbsp;<br><strong><span style="color: rgba(var(--bs-white-rgb),var(--bs-text-opacity)) ; background-color: rgba(255, 255, 255, 0);">Sharpen Memory PDF Guide</span></strong>�&nbsp;<br>for any multi-month purchase</h3><button class="btn btn-primary btn-lg cta-button" type="button">ORDER NOW</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="free-shipping">
+<div class="container">
+<div class="row">
+<div class="col-md-12 col-lg-3"><img class="img-fluid mx-auto d-block shipping-icon" src="images/shipping.svg"></div>
+<div class="col-md-12 col-lg-9 align-self-center">
+<div class="text-center">
+<h3 class="fw-bolder">Every <span class="is-underlined">6 Bottles</span>�&nbsp;Order Gets <span class="is-underlined">FREE Shipping</span>�&nbsp;Too!</h3>
+<h5>*96% Of Customers Order 6 Bottles (Our Recommended Option)</h5>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-primary p-2 pt-4">
+<div class="container">
+<h3 class="text-center fw-bolder text-white">Take advantage of this limited offer<br>to stock up on Cortexi while<br>supplies last!</h3>
+</div>
+</section>
+<div class="offer">
+<div class="container container-big">
+<div class="p-4 bg-primary triangle"></div>
+<div class="row pt-5">
+<div class="col-md-4 text-center mb-3 zoom  order-md-first order-sm-last order-sm-last order-last">
+<div class="bottleArea ">
+<div class="row">
+<div class="col-sm-6 col-md-12 bottleTop">
+<div class="bottleTitle">
+<h1 class="mb-0">Try One</h1>
+<h4 class="mt-0">30 Days, 1 Bottle</h4>
+</div>
+<img class="img-fluid" src="images/PRODx1-500px.png">
+</div>
+<div class="col-sm-6 col-md-12 addToCartArea">
+<div class="bottlePrice">
+<h2 class="display-4">$69</h2>
+<span class="perBottle">Per<br>Bottle<br></span>
+<div class="youSave">
+<p>YOU SAVE $110!</p>
+</div>
+<a class="addToCart" data-callback="ctaEvents" data-sku="CTX01" data-price="69" data-link-type="vsl-cta" data-link-index="1" href="https://www.buygoods.com/secure/checkout.html?account_id=7940&amp;product_codename=CTX01&amp;redirect=aHR0cHM6Ly90cnljb3J0ZXhpLmNvbS9iL3UxLnBocA==" target="_blank">Add to Cart</a>
+<p class="money-back"><em>• 60 Day Money-Back Guarantee •</em></p>
+<img class="img-fluid" src="images/cards.png">
+<h3>
+<s class="oldPrice mx-1">$179</s>
+<span class="newPrice mx-1">$69<br></span>
+<span class="shipping">+SHIPPING�&nbsp;</span>
+</h3>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-4 text-center mb-3 zoom order-md-1 order-sm-first order-first">
+<div class="bottleArea  featured">
+<div class="row">
+<div class="col-sm-6 col-md-12 bottleTop">
+<div class="bottleTitle">
+<h1 class="mb-0">Best Value</h1>
+<h4 class="mt-0">180 Days, 6 Bottles</h4>
+</div>
+<img class="img-fluid" src="images/PRODx6-500px.png">
+</div>
+<div class="col-sm-6 col-md-12 addToCartArea">
+<div class="bottlePrice">
+<h2 class="display-4">$49</h2>
+<span class="perBottle">Per<br>Bottle<br></span>
+<div class="youSave">
+<p>YOU SAVE $780!</p>
+</div>
+<a class="addToCart" data-callback="ctaEvents" data-sku="CTX06" data-price="294" data-link-type="vsl-cta" data-link-index="6" href="https://www.buygoods.com/secure/checkout.html?account_id=7940&amp;product_codename=CTX06&amp;redirect=aHR0cHM6Ly90cnljb3J0ZXhpLmNvbS9iL3UxLnBocA==" target="_blank">Add to Cart</a>
+<p class="money-back"><em>• 60 Day Money-Back Guarantee •</em></p>
+<img class="img-fluid" src="images/cards.png">
+<h3>
+<s class="oldPrice mx-1">$1074</s>
+<span class="newPrice mx-1">$294<br></span>
+<span class="shipping">US SHIPPING�&nbsp;</span>
+<span class="freeShiping">FREE</span>
+</h3>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-4 text-center mb-3 zoom order-md-last">
+<div class="bottleArea ">
+<div class="row">
+<div class="col-sm-6 col-md-12 bottleTop">
+<div class="bottleTitle">
+<h1 class="mb-0">Most Popular</h1>
+<h4 class="mt-0">90 Days, 3 Bottles</h4>
+</div>
+<img class="img-fluid" src="images/PRODx3-500px.png">
+</div>
+<div class="col-sm-6 col-md-12 addToCartArea">
+<div class="bottlePrice">
+<h2 class="display-4">$59</h2>
+<span class="perBottle">Per<br>Bottle<br></span>
+<div class="youSave">
+<p>YOU SAVE $360!</p>
+</div>
+<a class="addToCart" data-callback="ctaEvents" data-sku="CTX03" data-price="177" data-link-type="vsl-cta" data-link-index="3" href="https://www.buygoods.com/secure/checkout.html?account_id=7940&amp;product_codename=CTX03&amp;redirect=aHR0cHM6Ly90cnljb3J0ZXhpLmNvbS9iL3UxLnBocA==" target="_blank">Add to Cart</a>
+<p class="money-back"><em>• 60 Day Money-Back Guarantee •</em></p>
+<img class="img-fluid" src="images/cards.png">
+<h3>
+<s class="oldPrice mx-1">$537</s>
+<span class="newPrice mx-1">$177<br></span>
+<span class="shipping">US SHIPPING�&nbsp;</span>
+<span class="freeShiping">FREE</span>
+</h3>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="text-center pb-4 pt-3"><img class="img-fluid" src="images/paypal-pay-later.jpg" style="border: #041e73 2px solid;"></div>
+<div class="row">
+<div class="col-9 col-sm-5 col-md-4 col-4 mx-auto d-block">
+<div class="d-block mx-auto">
+<h4 class="text-center">Our customers say</h4>
+</div>
+<div class="d-block mx-auto"><img class="img-fluid" src="images/rating.png"></div>
+<div class="d-block mx-auto">
+<p class="text-center">based on 16,200+ reviews!</p>
+</div>
+</div>
+</div>
+</div>
+</div> <section class="guarantee bg-light">
+<div class="container py-5">
+<div class="row bg-white rounded-4">
+<div class="col-md-4 col-lg-4"><img class="img-fluid mx-auto d-block" src="images/guarantee.jpg"></div>
+<div class="col-md-8 col-lg-8">
+<h2 class="fw-bolder">60-DAY MONEY BACK GUARANTEE 100% SATISFACTION GUARANTEED<br></h2>
+<p>Cortexi comes with a 100% money back guarantee - 60 full days from your original purchase. If you're not totally and completely satisfied with our product or your results within the first 60 days simply let us know by calling our toll-free number or dropping us an email and we'll gladly give you a full refund within 48 hours of the product being returned. <br><br>
+That's right - simply return the product, even your empty bottles, anytime within 60 days of your purchase and you'll receive a full, no-questions-asked refund (minus shipping and handling fees).</p>
+</div>
+</div>
+</div>
+</section>
+<script type="d53c835f62fbc29b2fb22ff6-text/javascript">
+        function orderButtons(buttons, offer) {
+            var obj = this;
+            window.ctaButtons = this;
+            obj.scrollToOffer = function (event) {
+                event.preventDefault();
+                var target = document.querySelector(offer);
+                target.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+            };
+            obj.init = function () {
+                elements = document.querySelectorAll(buttons);
+                for (var i = 0; i < elements.length; i++) {
+                    elements[i].addEventListener('click', obj.scrollToOffer, false);
+                }
+            }
+            obj.init();
+        }
+        cta = new orderButtons(".cta-button", ".offer");    
+    </script> <section class="mt-4">
+<div class="container">
+<h3 class="text-center"><strong>Scientific References</strong></h3>
+<div class="row reference">
+<div class="col-md-6 col-lg-6 col-xl-6">
+<div class="row d-xxl-flex align-items-xxl-center">
+<div class="col"><img class="img-fluid img-fluid mx-auto" src="images/university-of-leicester-logo-vector.png"></div>
+<div class="col"><img class="img-fluid img-fluid mx-auto" src="images/manch.png"></div>
+</div>
+</div>
+<div class="col-md-6 col-lg-6 col-xl-6">
+<div class="row d-xxl-flex align-items-xxl-center">
+<div class="col"><img class="img-fluid img-fluid mx-auto" src="images/pngfind.png"></div>
+<div class="col"><img class="img-fluid img-fluid mx-auto" src="images/coch.png"></div>
+</div>
+</div>
+<div class="col-md-6 col-lg-6">
+<ol class="reference_list">
+<li>Rebooting the brain helps stop the ring of tinnitus in rats - National Institute on Deafness and Other Communication Disorders (NIDCD)</li>
+<li>The link between hearing loss and Alzheimer’s disease�&nbsp;</li>
+<li>White, P. M., Doetzlhofer, A., Lee, Y. S., Groves, A. K., and Segil, N. (2006). Mammalian cochlear supporting cells can divide and trans-differentiate into hair cells. Nature 441, 984–987.�&nbsp;</li>
+<li>Tinnitus Epidemiology: Prevalence, Severity, Exposures And Treatment Patterns In The United States</li>
+<li>What Herbs are Good for Hearing Loss?</li>
+<li>Neuroprotective potential of phytochemicals�&nbsp;- G. Phani Kumar and Farhath Khanum - Jul-Dec 2012�&nbsp;</li>
+<li>A Course in Miracles by Helen Schucman</li>
+<li>Identification of medicinal plants of Urmia for treatment of gastrointestinal disorders</li>
+<li>The Benefits of California Poppy (Eschscholzia californica)</li>
+<li>Tinnitus is the result of the brain trying, but failing, to repair itself�&nbsp;- Georgetown University Medical Center - Jan 2011</li>
+<li>Free radical production and ischemic brain damage: influence of postischemic oxygen tension - Agardh CD and others</li>
+<li>B Vitamins and the Brain: Mechanisms, Dose and Efficacy-A Review - David O. Kennedy - Feb 2016</li>
+</ol>
+</div>
+<div class="col-md-6 col-lg-6">
+<ol class="reference_list" start="13">
+<li>Mapping cortical hubs in tinnitus.�&nbsp;- Winfried Schlee and others - Nov 2009</li>
+<li>Intracranial Mapping of a Cortical Tinnitus System using Residual Inhibition - WilliamSedley and others - Apr 2015</li>
+<li>Neurotoxicity of General Anesthetics: Cause for Concern?�&nbsp;- Misha Perouansky and Hugh C. Hemmings - Dec 2010</li>
+<li>Potential Links between Impaired One-Carbon Metabolism Due to Polymorphisms, Inadequate B-Vitamin Status, and the Development of Alzheimer's Disease.�&nbsp;- Troesch B and others - Dec 2016</li>
+<li>Neurotoxicity of General Anesthetics: Cause for Concern?” - Misha Perouansky and Hugh C. Hemmings - Dec 2010�&nbsp;</li>
+<li>Singh V.K., Newman V.L., Berg A.N., MacVittie T.J. Animal models for acute radiation syndrome drug discovery. Expert Opin. Drug Discov. 2015;10:497–517. doi: 10.1517/17460441.2015.1023290</li>
+<li>Abayomi O.K. Pathogenesis of irradiation-induced cognitive dysfunction. Acta Oncol. 1996;35:659–663. doi: 10.3109/02841869609083995</li>
+<li>Davydov M., Krikorian A.D. Eleutherococcus senticosus (Rupr. &amp; Maxim.) Maxim. (Araliaceae) as an adaptogen: A closer look. J. Ethnopharmacol. 2000;72:345–393</li>
+<li>Xie Y., Zhang B., Zhang Y. Protective effects of Acanthopanax polysaccharides on cerebral ischemia-reperfusion injury and its mechanisms. Int. J. Biol. Macromol. 2015;72:946–950. doi: 10.1016/j.ijbiomac.2014.09.055<br><br></li>
+</ol>
+</div>
+</div>
+</div>
+</section>
+<footer class="text-center bg-dark">
+<div class="container text-white py-4 py-lg-5">
+<ul class="list-inline small">
+<li class="list-inline-item"><a class="link-light" href="/info/contact.html" target="_blank">Contact</a></li>
+<li class="list-inline-item"><a class="link-light" href="/info/references.html" target="_blank">References</a></li>
+<li class="list-inline-item"><a class="link-light" href="/info/terms.html" target="_blank">Terms</a></li>
+<li class="list-inline-item"><a class="link-light" href="/info/privacy.html" target="_blank">Privacy</a></li>
+<li class="list-inline-item"><a class="link-light" href="/info/return-policy.html" target="_blank">Return Policy</a></li>
+<li class="list-inline-item"><a class="link-light" href="/info/shipping.html" target="_blank">Shipping</a></li>
+<li class="list-inline-item"><a class="link-light" href="/info/disclamer.html" target="_blank">Disclaimer</a></li>
+<li class="list-inline-item"><a class="link-light" href="/unsubscribe.php" target="_blank">Report Spam</a></li>
+</ul>
+<div class="row bg-disclaimer">
+<div class="col-md-8 col-lg-6 offset-md-2 offset-lg-3 border-bottom border-light mb-2"><a href="#"><img class="img-fluid w-50 bg-logo" src="images/buygoods.webp" href="#"></a></div>
+<div class="col-md-10 offset-md-1">
+<p class="fw-light small text-muted">BuyGoods is the retailer of this product. BuyGoods is a registered trademark of BuyGoods, a Delaware corporation located at 1201 N Orange Street Suite #7223, Wilmington, DE, 19801, USA and used by permission. BuyGoods role as retailer does not constitute an endorsement, approval or review of this product or any claim, statement or opinion used in promotion of this product. Statements on this website have not been evaluated by the Food and Drug Administration. Products are not intended to diagnose, treat, cure or prevent any disease.</p>
+</div>
+</div>
+<div></div>
+<p class="text-muted mb-0 small">© Cortexi Research 2023 All Rights Reserved.</p>
+</div>
+</footer>
+<script type="d53c835f62fbc29b2fb22ff6-text/javascript">document.querySelectorAll("[data-disable-user-interaction]").forEach((function (e) { e.classList.add("no-user-interaction"), e.addEventListener("contextmenu", (function (e) { e.preventDefault() })) }))</script>
+<div id="reel_host"><span class="hide"></span></div>
+<script src="js/bootstrap.bundle.min.js" type="d53c835f62fbc29b2fb22ff6-text/javascript"></script>
+
+<script type="d53c835f62fbc29b2fb22ff6-text/javascript">
+    function trackInitiateCheckout(elemClass){
+        url = "halfkjrjd3ew";
+        nid = 2137;
+        init_id = 15;
+        if (typeof evf === 'undefined') {
+            window.evf = {};
+        }
+        evf.url = url;
+        evf.nid = nid;
+        evf.init_id = init_id;
+        evf.checkoutStarted = false;
+
+        evf.urlParam = function (param) {
+            var t = new RegExp("[?&]" + param + "=([^&#]*)").exec(window.location.href);
+            return null === t ? null : t[1] || 0
+        }
+
+        evf.addToCartEvent = function () {
+            if (!evf.checkoutStarted) {
+                evf.checkoutStarted = true;
+                evf.script = document.createElement('iframe');
+                evf.script.width = 1;
+                evf.script.height = 1;
+                evf.script.frameBorder = 0;
+                evf.script.transaction_id = evf.urlParam('subid2');
+                evf.script.src = "https://www." + evf.url + ".com/?nid=" + evf.nid + "&event_id=" + evf.init_id  + "&transaction_id=" + evf.script.transaction_id + "";
+                document.getElementsByTagName('body')[0].appendChild(evf.script);
+
+                console.log('Track InitiateCheckout Event');    
+                if (typeof(runPixels) === 'function'){
+                    runPixels("InitiateCheckout");
+                }         
+            }
+        }
+
+        evf.buttons = document.getElementsByClassName(elemClass);
+        for (var i = 0; i < evf.buttons.length; i++) {
+            evf.buttons[i].addEventListener('click', evf.addToCartEvent, false);
+        }
+    }
+
+</script> <script type="d53c835f62fbc29b2fb22ff6-text/javascript">
+        trackInitiateCheckout("addToCart");
+    </script>
+
+<script src="js/rocket-loader.min.js" data-cf-settings="d53c835f62fbc29b2fb22ff6-|49" defer=""></script>
+</body></html>
